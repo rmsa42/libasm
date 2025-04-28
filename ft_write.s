@@ -4,7 +4,7 @@ extern __errno_location
 
 section .text
 
-; rax fd, rsi str, rdi len
+; rax fd, rdi str, rsi len
 ft_write:
 	mov rax, 1 ; Write syscall
 	syscall ; Call write()
