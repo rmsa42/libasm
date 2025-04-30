@@ -6,6 +6,7 @@
 
 extern ssize_t ft_write(int fd, void *str, size_t nbyte);
 extern size_t ft_strlen(char *str);
+extern int ft_strcmp(char *str1, char *str2);
 
 void ft_write_tests() {
 	char *str = NULL;
@@ -44,6 +45,18 @@ void ft_strlen_tests() {
 	assert(ft_strlen(str) == strlen(str));
 }
 
+void ft_strcmp_tests() {
+	char *str1 = "Hello";
+	char *str2 = "Hellk";
+	int ret;
+	int ft_ret;
+
+	ret = strcmp(str1, str2);
+	ft_ret = ft_strcmp(str1, str2);
+	printf("Str1: %d\n", ft_ret);
+	//assert(ft_ret == ret);
+}
+
 int main() {
 	printf("--- FT_WRITE ---\n");
 	ft_write_tests();
@@ -51,5 +64,9 @@ int main() {
 
 	printf("--- FT_STRLEN ---\n");
 	ft_strlen_tests();
+	printf("----------------\n\n");
+
+	printf("--- FT_STRCMP ---\n");
+	ft_strcmp_tests();
 	printf("----------------\n\n");
 }

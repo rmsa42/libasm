@@ -2,7 +2,7 @@ NAME = libasm
 NASM = nasm
 NASM_FLAGS = -f elf64
 
-SRC = ft_write.s ft_strlen.s
+SRC = ft_write.s ft_strlen.s ft_strcmp.s
 OBJ = $(SRC:.s=.o)
 
 %.o: %.s
