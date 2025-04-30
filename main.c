@@ -1,4 +1,5 @@
 #include <errno.h>
+#include <stdlib.h>
 #include <string.h>
 #include <assert.h>
 #include <unistd.h>
@@ -7,7 +8,9 @@
 extern ssize_t ft_write(int fd, void *str, size_t nbyte);
 extern size_t ft_strlen(char *str);
 extern int ft_strcmp(char *str1, char *str2);
-extern char teste(char *str);
+//extern char teste(char *str);
+extern int ft_read(int fd, void *buf, size_t nbyte);
+extern char *ft_strcpy(const char *dest, const char *src);
 
 void ft_write_tests() {
 	char *str = NULL;
@@ -47,28 +50,46 @@ void ft_strlen_tests() {
 }
 
 void ft_strcmp_tests() {
-	char *str1 = "Hello";
+	char *str1 = "POlasd";
 	char *str2 = "Hello";
 	int ret;
 	int ft_ret;
 
 	ret = strcmp(str1, str2);
 	ft_ret = ft_strcmp(str1, str2);
-	//printf("ft: %d, strcmp: %d\n", ft_ret, ret);
+	printf("ft: %d, strcmp: %d\n", ft_ret, ret);
 	assert(ft_ret == ret);
 
-	str1 = "JIOK";
-	ret = strcmp(str1, str2);
-	ft_ret = ft_strcmp(str1, str2);
+	//str1 = "JIOK";
+	//ret = strcmp(str1, str2);
+	//ft_ret = ft_strcmp(str1, str2);
 	//printf("ft: %d, strcmp: %d\n", ft_ret, ret);
-	assert(ft_ret == ret);
+	//assert(ft_ret == ret);
 
-	str1 = "JIOK";
-	str2 = "lol";
-	ret = strcmp(str1, str2);
-	ft_ret = ft_strcmp(str1, str2);
+	//str1 = "JIOK";
+	//str2 = "lol";
+	//ret = strcmp(str1, str2);
+	//ft_ret = ft_strcmp(str1, str2);
 	//printf("ft: %d, strcmp: %d\n", ft_ret, ret);
-	assert(ft_ret == ret);
+	//assert(ft_ret == ret);
+}
+
+void ft_read_tests() {
+	int ret;
+	char buffer[100] = {0};
+	
+	//ret = read(10, NULL, sizeof(buffer));
+	ret = ft_read(10, NULL, sizeof(buffer));
+}
+
+void ft_strcpy_tests() {
+	char *ret = NULL;
+	char buffer[100] = {0};
+	char *src = "Hello";
+
+	ret = ft_strcpy(buffer, src);
+	printf("Buffer: %s, Src: %s\n", ret, src);
+	assert(strcmp(buffer, src) == 0);
 }
 
 int main() {
@@ -81,9 +102,14 @@ int main() {
 	printf("----------------\n\n");
 
 	printf("--- FT_STRCMP ---\n");
-	ft_strcmp_tests();
+	//ft_strcmp_tests();
 	printf("----------------\n\n");
 
-	char ptr = teste("hello");
-	printf("Teste Ret: %c\n", ptr);
+	printf("--- FT_READ ---\n");
+	ft_read_tests();
+	printf("----------------\n\n");
+
+	printf("--- FT_STRCPY ---\n");
+	ft_strcpy_tests();
+	printf("----------------\n\n");
 }

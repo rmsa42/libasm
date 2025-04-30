@@ -14,8 +14,8 @@ ft_write:
 
 errno:
 	neg rax
-	mov rdi, rax
+	mov rcx, rax
 	call __errno_location ; Set errno
-	mov [rax], rdi
+	mov [rax], rcx
 	mov rax, -1 ; Set return value to -1
 	ret
