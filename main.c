@@ -11,6 +11,7 @@ extern int ft_strcmp(char *str1, char *str2);
 //extern char teste(char *str);
 extern int ft_read(int fd, void *buf, size_t nbyte);
 extern char *ft_strcpy(const char *dest, const char *src);
+extern char *ft_strdup(const char *str);
 
 void ft_write_tests() {
 	char *str = NULL;
@@ -92,6 +93,15 @@ void ft_strcpy_tests() {
 	assert(strcmp(buffer, src) == 0);
 }
 
+void ft_strdup_tests() {
+	char *str = "POALSD";
+
+	char *ret = ft_strdup(str);
+	printf("Str: %p\n", str);
+	printf("Ret: %p, %s\n", ret, ret);
+	assert(strcmp(str, ret) == 0);
+}
+
 int main() {
 	printf("--- FT_WRITE ---\n");
 	ft_write_tests();
@@ -111,5 +121,9 @@ int main() {
 
 	printf("--- FT_STRCPY ---\n");
 	ft_strcpy_tests();
+	printf("----------------\n\n");
+
+	printf("--- FT_STRDUP ---\n");
+	ft_strdup_tests();
 	printf("----------------\n\n");
 }
