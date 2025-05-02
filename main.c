@@ -12,7 +12,7 @@ extern int ft_strcmp(char *str1, char *str2);
 extern int ft_read(int fd, void *buf, size_t nbyte);
 extern char *ft_strcpy(const char *dest, const char *src);
 extern char *ft_strdup(const char *str);
-extern int ft_atoi_base(char *str);
+extern int ft_atoi_base(char *str, char *base);
 
 void ft_write_tests() {
 	char *str = NULL;
@@ -114,7 +114,7 @@ void ft_atoi_base_tests() {
 	char *binary_base = "01";
 	int ret;
 
-	ret = ft_atoi_base(str);
+	ret = ft_atoi_base(str, dec_base);
 	printf("Ret: %d\n", ret);
 	//assert(ret == atoi(str));
 }
