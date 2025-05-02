@@ -1,6 +1,5 @@
-global ft_strcmp
-
 section .text
+global ft_strcmp
 
 ; rdi str1, rsi str2
 ft_strcmp:

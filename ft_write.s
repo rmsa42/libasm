@@ -1,8 +1,7 @@
+section .text
 global ft_write
 
 extern __errno_location
-
-section .text
 
 ; rax fd, rdi str, rsi len
 ft_write:

@@ -1,8 +1,7 @@
+section .text
 global ft_strdup
 
 extern malloc ; malloc(size * count)
-
-section .text
 
 ; rdi str
 ft_strdup:

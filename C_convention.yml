@@ -1,0 +1,38 @@
+Order of arguments:
+
+1 - rdi
+2 - rsi
+3 - rdx
+4 - rcx
+5 - r8
+6 - r9
+
+More arguments go to the stack (rsp)
+
+Registers Size:
+
+64 bits: rax, rcx, rdx, rbx, rsp, rbp, rsi, rdi
+32 bits: eax
+16 bits: ax
+8 bits: ah
+
+Size Keywords:
+
+8 bits: byte
+16 bits: word
+32 bits: dword
+64 bits: qword
+
+Stack Frames:
+
+push rbp: Save the value from previous function. This prepares the stack frame
+	for this funtion (save frame pointer - sfp)
+mov rbp, rsp: Puts the rbp in the top of the stack. Inits the stack frame for
+	this function
+sub esp, 16: Create local variables for this function
+mov DWORD [ebp - 8], 0x10: Assigning a value to the first local variable
+
+mov rsp, rbp: Cleaning all local variables to return from the function
+pop ebp: Cleans the sfp previous pushed to the stack
+ret: Return
+
