@@ -12,6 +12,7 @@ extern int ft_strcmp(char *str1, char *str2);
 extern int ft_read(int fd, void *buf, size_t nbyte);
 extern char *ft_strcpy(const char *dest, const char *src);
 extern char *ft_strdup(const char *str);
+extern int ft_atoi_base(char *str);
 
 void ft_write_tests() {
 	char *str = NULL;
@@ -42,11 +43,14 @@ void ft_strlen_tests() {
 
 	// Normal Test
 	str = "Hello";
+	printf("Ret: %zu\n", ft_strlen(str));
 	assert(ft_strlen(str) == strlen(str));
 	// Empty Test
+	printf("Ret: %zu\n", ft_strlen(""));
 	assert(ft_strlen("") == strlen(""));
 	// \0 in the middle
 	str = "He\0llo";
+	printf("Ret: %zu\n", ft_strlen(str));
 	assert(ft_strlen(str) == strlen(str));
 }
 
@@ -102,6 +106,19 @@ void ft_strdup_tests() {
 	assert(strcmp(str, ret) == 0);
 }
 
+void ft_atoi_base_tests() {
+	char *str = "10981";
+	char *dec_base = "0123456789";
+	char *hex_base = "0123456789abcdef";
+	char *octal_base = "01234567";
+	char *binary_base = "01";
+	int ret;
+
+	ret = ft_atoi_base(str);
+	printf("Ret: %d\n", ret);
+	//assert(ret == atoi(str));
+}
+
 int main() {
 	printf("--- FT_WRITE ---\n");
 	ft_write_tests();
@@ -125,5 +142,9 @@ int main() {
 
 	printf("--- FT_STRDUP ---\n");
 	ft_strdup_tests();
+	printf("----------------\n\n");
+
+	printf("--- FT_ATOI_BASE ---\n");
+	ft_atoi_base_tests();
 	printf("----------------\n\n");
 }
