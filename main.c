@@ -107,7 +107,7 @@ void ft_strdup_tests() {
 }
 
 void ft_atoi_base_tests() {
-	char *str = "10981";
+	char *str = "109";
 	char *dec_base = "0123456789";
 	char *hex_base = "0123456789abcdef";
 	char *octal_base = "01234567";
