@@ -1,6 +1,7 @@
 section .data
 
-data: db "LOL: %d", 10, 0
+base: db "Error in verify_base", 10, 0
+str: db "Error in verify_str", 10, 0
 
 section .text
 global ft_atoi_base
@@ -8,22 +9,10 @@ global ft_atoi_base
 extern strlen ; strlen(rdi - char *str)
 extern printf ; printf("Str", )
 
-print:
-	push rbp
-	mov rbp, rsp
-	mov rdi, data
-	mov rsi, rax
-	call printf
-	mov rsp, rbp
-	pop rbp
-	ret
-	
 ; rdi str
 get_base:
 	push rbp
 	mov rbp, rsp
-	sub rsp, 4
-	mov dword [rbp - 4], 0
 	mov rax, 0
 .loop:
 	movsx rcx, byte [rdi + rax]
@@ -36,36 +25,160 @@ get_base:
 	pop rbp
 	ret
 
+; rdi str
+verify_base:
+	push rbp
+	mov rbp, rsp
+	sub rsp, 16
+	mov qword [rbp - 8], rdi
+.loop:
+	movsx rcx, byte [rdi]
+	cmp rcx, 0
+	je .return
+	cmp rcx, '+' ; Verify '+' char
+	je .error
+	cmp rcx, '-' ; Verify '-' char
+	je .error
+	lea rdi, qword [rdi + 1]
+	mov rsi, rcx ; Load char to rsi
+	call find ; Verify duplicate char (rdi - base, rsi - char)
+	cmp rax, 1
+	je .error
+	mov rdi, qword [rbp - 8]
+	inc rdi
+	mov qword [rbp - 8], rdi
+	jmp .loop
+.error:
+	mov rax, 1
+	mov rsp, rbp
+	pop rbp
+	ret
+.return:
+	mov rax, 0
+	mov rsp, rbp
+	pop rbp
+	ret
+
+; rdi str, rsi char
+find:
+	push rbp
+	mov rbp, rsp
+	sub rsp, 4
+	mov dword [rbp - 4], 0
+	mov rax, 0
+.loop:
+	movsx rcx, byte [rdi + rax]
+	cmp rcx, 0
+	je .return
+	cmp cl, sil
+	je .dup
+	movsx rax, dword [rbp - 4]
+	inc rax
+	mov dword [rbp - 4], eax
+	jmp .loop
+.dup:
+	mov rax, 1
+	mov rsp, rbp
+	pop rbp
+	ret
+.return:
+	mov rax, 0
+	mov rsp, rbp
+	pop rbp
+	ret
+
+; rdi str, rsi base
+verify_str:
+	push rbp
+	mov rbp, rsp
+	sub rsp, 16
+	mov qword [rbp - 8], rdi
+	mov qword [rbp - 16], rsi
+.loop:
+	movsx rcx, byte [rdi]
+	cmp rcx, 0
+	je .return
+	mov rdi, qword [rbp - 16]
+	mov rsi, rcx
+	call find
+	cmp rax, 0
+	je .error
+	mov rdi, qword [rbp - 8]
+	inc rdi
+	mov qword [rbp - 8], rdi
+	jmp .loop
+.error:
+	mov rax, 1
+	mov rsp, rbp
+	pop rbp
+	ret
+.return:
+	mov rax, 0
+	mov rsp, rbp
+	pop rbp
+	ret
+
 ; rdi str, rsi base
 ft_atoi_base:
 	push rbp
 	mov rbp, rsp
 	sub rsp, 16
 	mov dword [rbp - 4], 0
+	mov qword [rbp - 8], rdi
+	mov qword [rbp - 16], rsi
 
 	; Get the length of base
-	push rdi ; This misaligns the stack. Calling other functions will result in sigsev
-	mov rdi, rsi
+	mov rdi, rsi ; Move base to rdi
 	call get_base
+	cmp rax, 1 ; See if base exists or has 1 length
+	jle .error
 	mov r11, rax
-	pop rdi
+
+	; Verify Base
+	call verify_base
+	cmp rax, 1
+	je .error
+
+	mov rdi, qword [rbp - 8] ; Get the pointer to the original string
+	mov rsi, qword [rbp - 16] ; Get the original pointer to base
+
+	; Verify str input
+	call verify_str
+	cmp rax, 1
+	je .error
+
+	mov rdi, qword [rbp - 8] ; Get the pointer to the original string
 	mov r10, 0
 
-.loop:
+.loop_1:
 	movsx rcx, byte [rdi + r10] ; Get character
 	cmp rcx, 0
 	je .return
-	sub rcx, 48 ; add '0'
-	push rax ; Save last rax value
+	cmp rcx, 'A'
+	jge .hexa
+	cmp rcx, '0'
+	jge .dec
+.dec:
+	sub rcx, 48
+	jmp .loop_2
+.hexa:
+	sub rcx, 65
+	add rcx, 10
+	jmp .loop_2
+.loop_2:
 	mov rax, r11 ; Load the multiplier in rax
 	mul dword [rbp - 4] ; Multiply the rax reg (strlen ret) with the current number in the variable
-	add eax, ecx ; Add the multiplication result and the number
+	add rax, rcx ; Add the multiplication result and the number
 	mov dword [rbp - 4], eax ; Store the result into the variable
-	pop rax
 	inc r10
-	jmp .loop
+	jmp .loop_1
+.error:
+	mov rax, 0
+	mov rsp, rbp
+	pop rbp
+	ret
 .return:
-	movsx rax, dword [rbp - 4]
+	mov eax, dword [rbp - 4]
 	mov rsp, rbp
 	pop rbp
 	ret

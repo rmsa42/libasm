@@ -8,7 +8,7 @@
 extern ssize_t ft_write(int fd, void *str, size_t nbyte);
 extern size_t ft_strlen(char *str);
 extern int ft_strcmp(char *str1, char *str2);
-//extern char teste(char *str);
+extern char test(char *str);
 extern int ft_read(int fd, void *buf, size_t nbyte);
 extern char *ft_strcpy(const char *dest, const char *src);
 extern char *ft_strdup(const char *str);
@@ -107,7 +107,7 @@ void ft_strdup_tests() {
 }
 
 void ft_atoi_base_tests() {
-	char *str = "109";
+	char *str = "101";
 	char *dec_base = "0123456789";
 	char *hex_base = "0123456789abcdef";
 	char *octal_base = "01234567";
@@ -115,7 +115,15 @@ void ft_atoi_base_tests() {
 	int ret;
 
 	ret = ft_atoi_base(str, dec_base);
-	printf("Ret: %d\n", ret);
+	printf("Dec: %d\n", ret);
+	ret = ft_atoi_base(str, hex_base);
+	printf("Hex: %d\n", ret);
+	ret = ft_atoi_base(str, octal_base);
+	printf("Oct: %d\n", ret);
+	ret = ft_atoi_base(str, binary_base);
+	printf("Bin: %d\n", ret);
+	ret = ft_atoi_base("101A", dec_base);
+	printf("Bin: %d\n", ret);
 	//assert(ret == atoi(str));
 }
 
