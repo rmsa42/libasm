@@ -20,6 +20,7 @@ extern char *ft_strdup(const char *str);
 extern int ft_atoi_base(char *str, char *base);
 extern void ft_list_push_front(struct list **list, void *data);
 extern int ft_list_size(struct list *list);
+extern void ft_list_sort(struct list **list, int(*cmp)(int, int));
 
 void ft_write_tests() {
 	char *str = NULL;
@@ -135,29 +136,49 @@ void ft_atoi_base_tests() {
 	//assert(ret == atoi(str));
 }
 
-void ft_list_tests() {
-	struct list *list = malloc(sizeof(struct list));
-	int nbr = 10;
-	list->data = &nbr;
-	list->next = NULL;
+int cmp(int a, int b) {
+	return (a - b);
+}
 
-	int a = 90;
-	printf("List PTR: %p\n", list);
-	printf("A: %p\n", &a);
-	ft_list_push_front(&list, (void *)&a);
-	ft_list_push_front(&list, (void *)&a);
-	ft_list_push_front(&list, (void *)&a);
-	ft_list_push_front(&list, (void *)&a);
-	printf("Nbr: %p\n", list->data);
+struct list *new_node(const int *nbr) {
+	struct list *node;
+
+	node = malloc(sizeof(struct list));
+	node->data = (void *)nbr;
+	node->next = NULL;
+	return (node);
+}
+
+void ft_list_tests() {
+	int nbr[3] = {3, 2, 1};
+	struct list *list = new_node(&nbr[0]);
+	
+	for (int i = 1; i < 3; i++) {
+		list->next = new_node(&nbr[i]);
+	}
+	int lol = 90;
+	ft_list_push_front(&list, &lol);
 	struct list *temp = list;
 	while (temp != NULL) {
 		printf("List Node: %d\n", *(int *)temp->data);
 		temp = temp->next;
 	}
+	printf("----------------\n\n");
 
 	// ft_list_size
-	nbr = ft_list_size(list);
-	printf("Size: %d\n", nbr);
+	printf("--- FT_LIST_SIZE ---\n");
+	int size = ft_list_size(list);
+	printf("Size: %d\n", size);
+	printf("----------------\n\n");
+
+	// ft_list_sort
+	printf("--- FT_LIST_SORT ---\n");
+	ft_list_sort(&list, &cmp);
+	temp = list;
+	while (temp != NULL) {
+		printf("List Node: %d\n", *(int *)temp->data);
+		temp = temp->next;
+	}
 }
 
 int main() {
