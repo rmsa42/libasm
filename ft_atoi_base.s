@@ -159,7 +159,7 @@ ft_atoi_base:
 	call get_base
 	cmp rax, 1 ; See if base exists or has 1 length
 	jle .error
-	mov r11, rax
+	mov dword [rbp - 24], eax
 
 	; Verify Base
 	call verify_base
@@ -171,38 +171,34 @@ ft_atoi_base:
 
 	; Count the "+-"
 	call sign_count
-	mov dword [rbp - 20], eax
-	mov qword [rbp - 8], rdi
-
-	;mov rdi, print_nbr
-	;movsx rsi, dword [rbp - 20]
-	;call printf
+	mov dword [rbp - 20], eax ; Save the sign
+	mov qword [rbp - 8], rdi ; Pointer to the start of the number
 
 	; Verify str input
 	call verify_str
 	cmp rax, 1
 	je .error
 
-	mov rdi, qword [rbp - 8] ; Get the pointer to the original string
+	mov rdi, qword [rbp - 8] ; Get the pointer to the string
 	mov r10, 0
 
 .loop_1:
 	movsx rcx, byte [rdi + r10] ; Get character
 	cmp rcx, 0
 	je .return
-	cmp rcx, 'A'
+	cmp rcx, 'A' ; If is an hexa characters
 	jge .hexa
-	cmp rcx, '0'
+	cmp rcx, '0' ; If is a number
 	jge .dec
 .dec:
-	sub rcx, 48
+	sub rcx, '0'
 	jmp .loop_2
 .hexa:
-	sub rcx, 65
+	sub rcx, 'A'
 	add rcx, 10
 	jmp .loop_2
 .loop_2:
-	mov rax, r11 ; Load the multiplier in rax
+	movsx rax, dword [rbp - 24] ; Load the multiplier in rax
 	mul dword [rbp - 4] ; Multiply the rax reg (strlen ret) with the current number in the variable
 	add rax, rcx ; Add the multiplication result and the number
 	mov dword [rbp - 4], eax ; Store the result into the variable
