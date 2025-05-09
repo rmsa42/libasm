@@ -5,6 +5,11 @@
 #include <unistd.h>
 #include <stdio.h>
 
+struct list {
+	void *data;
+	struct list *next;
+};
+
 extern ssize_t ft_write(int fd, void *str, size_t nbyte);
 extern size_t ft_strlen(char *str);
 extern int ft_strcmp(char *str1, char *str2);
@@ -13,6 +18,7 @@ extern int ft_read(int fd, void *buf, size_t nbyte);
 extern char *ft_strcpy(const char *dest, const char *src);
 extern char *ft_strdup(const char *str);
 extern int ft_atoi_base(char *str, char *base);
+extern void ft_list_push_front(struct list **list, void *data);
 
 void ft_write_tests() {
 	char *str = NULL;
@@ -128,6 +134,26 @@ void ft_atoi_base_tests() {
 	//assert(ret == atoi(str));
 }
 
+void ft_list_push_front_tests() {
+	struct list *list = malloc(sizeof(struct list));
+	int nbr = 10;
+	list->data = &nbr;
+	list->next = NULL;
+
+	int a = 90;
+	printf("List PTR: %p\n", list);
+	printf("A: %p\n", &a);
+	ft_list_push_front(&list, (void *)&a);
+	ft_list_push_front(&list, (void *)&a);
+	ft_list_push_front(&list, (void *)&a);
+	ft_list_push_front(&list, (void *)&a);
+	printf("Nbr: %p\n", list->data);
+	while (list != NULL) {
+		printf("List Node: %d\n", *(int *)list->data);
+		list = list->next;
+	}
+}
+
 int main() {
 	printf("--- FT_WRITE ---\n");
 	ft_write_tests();
@@ -155,5 +181,9 @@ int main() {
 
 	printf("--- FT_ATOI_BASE ---\n");
 	ft_atoi_base_tests();
+	printf("----------------\n\n");
+
+	printf("--- FT_LIST_PUSH_FRONT ---\n");
+	ft_list_push_front_tests();
 	printf("----------------\n\n");
 }
