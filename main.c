@@ -19,6 +19,7 @@ extern char *ft_strcpy(const char *dest, const char *src);
 extern char *ft_strdup(const char *str);
 extern int ft_atoi_base(char *str, char *base);
 extern void ft_list_push_front(struct list **list, void *data);
+extern int ft_list_size(struct list *list);
 
 void ft_write_tests() {
 	char *str = NULL;
@@ -134,7 +135,7 @@ void ft_atoi_base_tests() {
 	//assert(ret == atoi(str));
 }
 
-void ft_list_push_front_tests() {
+void ft_list_tests() {
 	struct list *list = malloc(sizeof(struct list));
 	int nbr = 10;
 	list->data = &nbr;
@@ -148,10 +149,15 @@ void ft_list_push_front_tests() {
 	ft_list_push_front(&list, (void *)&a);
 	ft_list_push_front(&list, (void *)&a);
 	printf("Nbr: %p\n", list->data);
-	while (list != NULL) {
-		printf("List Node: %d\n", *(int *)list->data);
-		list = list->next;
+	struct list *temp = list;
+	while (temp != NULL) {
+		printf("List Node: %d\n", *(int *)temp->data);
+		temp = temp->next;
 	}
+
+	// ft_list_size
+	nbr = ft_list_size(list);
+	printf("Size: %d\n", nbr);
 }
 
 int main() {
@@ -184,6 +190,6 @@ int main() {
 	printf("----------------\n\n");
 
 	printf("--- FT_LIST_PUSH_FRONT ---\n");
-	ft_list_push_front_tests();
+	ft_list_tests();
 	printf("----------------\n\n");
 }
