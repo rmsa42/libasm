@@ -107,7 +107,7 @@ void ft_strdup_tests() {
 }
 
 void ft_atoi_base_tests() {
-	char *str = "101";
+	char *str = "-+-101";
 	char *dec_base = "0123456789";
 	char *hex_base = "0123456789abcdef";
 	char *octal_base = "01234567";
@@ -122,8 +122,9 @@ void ft_atoi_base_tests() {
 	printf("Oct: %d\n", ret);
 	ret = ft_atoi_base(str, binary_base);
 	printf("Bin: %d\n", ret);
-	ret = ft_atoi_base("101A", dec_base);
-	printf("Bin: %d\n", ret);
+	//ret = ft_atoi_base("101A", dec_base);
+	//printf("Bin: %d\n", ret);
+
 	//assert(ret == atoi(str));
 }
 

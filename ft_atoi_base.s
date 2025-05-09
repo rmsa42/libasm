@@ -1,5 +1,7 @@
 section .data
 
+print_nbr: db "Nbr: %d", 10, 0
+print_char: db "Char: %c", 10, 0
 base: db "Error in verify_base", 10, 0
 str: db "Error in verify_str", 10, 0
 
@@ -118,11 +120,36 @@ verify_str:
 	pop rbp
 	ret
 
+; rdi str
+sign_count:
+	push rbp
+	mov rbp, rsp
+	mov r10, 1
+.loop:
+	movsx rcx, byte [rdi]
+	cmp rcx, 48
+	jge .return
+	cmp rcx, 45
+	je .minus_sign
+.loop2:
+	inc rdi
+	jmp .loop
+.minus_sign:
+	mov rax, -1
+	mul r10
+	mov r10, rax
+	jmp .loop2
+.return:
+	mov rax, r10
+	mov rsp, rbp
+	pop rbp
+	ret
+
 ; rdi str, rsi base
 ft_atoi_base:
 	push rbp
 	mov rbp, rsp
-	sub rsp, 16
+	sub rsp, 32
 	mov dword [rbp - 4], 0
 	mov qword [rbp - 8], rdi
 	mov qword [rbp - 16], rsi
@@ -141,6 +168,15 @@ ft_atoi_base:
 
 	mov rdi, qword [rbp - 8] ; Get the pointer to the original string
 	mov rsi, qword [rbp - 16] ; Get the original pointer to base
+
+	; Count the "+-"
+	call sign_count
+	mov dword [rbp - 20], eax
+	mov qword [rbp - 8], rdi
+
+	;mov rdi, print_nbr
+	;movsx rsi, dword [rbp - 20]
+	;call printf
 
 	; Verify str input
 	call verify_str
@@ -179,6 +215,8 @@ ft_atoi_base:
 	ret
 .return:
 	mov eax, dword [rbp - 4]
+	movsx r10, dword [rbp - 20]
+	mul r10
 	mov rsp, rbp
 	pop rbp
 	ret
