@@ -6,11 +6,11 @@ ft_list_remove_if:
 	push rbp
 	mov rbp, rsp
 	sub rsp, 32
-	mov r10, [rdi]
-	mov qword [rbp - 8], r10
-	mov qword [rbp - 16], rsi
-	mov qword [rbp - 24], rdx
-	mov qword [rbp - 32], rcx
+	mov r10, [rdi] ; Store *list in r10
+	mov qword [rbp - 8], r10 ; Store *list in memory
+	mov qword [rbp - 16], rsi ; Store void* to make cmp
+	mov qword [rbp - 24], rdx ; Store the cmp func addr
+	mov qword [rbp - 32], rcx ; Store the free func addr
 .loop:
 	cmp r10, 0
 	je .ret

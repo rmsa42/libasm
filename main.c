@@ -45,6 +45,8 @@ void ft_write_tests() {
 	wr_ret = write(10, str, strlen(str));
 	ft_ret = ft_write(10, str, strlen(str));
 	assert(ft_ret == wr_ret);
+
+	printf("All good. No errors\n");
 }
 
 void ft_strlen_tests() {
@@ -61,6 +63,8 @@ void ft_strlen_tests() {
 	str = "He\0llo";
 	printf("Ret: %zu\n", ft_strlen(str));
 	assert(ft_strlen(str) == strlen(str));
+
+	printf("All good. No errors\n");
 }
 
 void ft_strcmp_tests() {
@@ -71,21 +75,37 @@ void ft_strcmp_tests() {
 
 	ret = strcmp(str1, str2);
 	ft_ret = ft_strcmp(str1, str2);
-	printf("ft: %d, strcmp: %d\n", ft_ret, ret);
+	printf("Ft: %d, Strcmp: %d\n", ft_ret, ret);
 	assert(ft_ret == ret);
 
-	//str1 = "JIOK";
-	//ret = strcmp(str1, str2);
-	//ft_ret = ft_strcmp(str1, str2);
-	//printf("ft: %d, strcmp: %d\n", ft_ret, ret);
-	//assert(ft_ret == ret);
+	str1 = "JIOK";
+	ret = strcmp(str1, str2);
+	ft_ret = ft_strcmp(str1, str2);
+	printf("Ft: %d, Strcmp: %d\n", ft_ret, ret);
+	assert(ft_ret == ret);
 
-	//str1 = "JIOK";
-	//str2 = "lol";
-	//ret = strcmp(str1, str2);
-	//ft_ret = ft_strcmp(str1, str2);
-	//printf("ft: %d, strcmp: %d\n", ft_ret, ret);
-	//assert(ft_ret == ret);
+	str1 = "JIOK";
+	str2 = "lol";
+	ret = strcmp(str1, str2);
+	ft_ret = ft_strcmp(str1, str2);
+	printf("Ft: %d, Strcmp: %d\n", ft_ret, ret);
+	assert(ft_ret == ret);
+
+	str1 = "Hel\0lo";
+	str2 = "Hel\0lo";
+	ret = strcmp(str1, str2);
+	ft_ret = ft_strcmp(str1, str2);
+	printf("Ft: %d, Strcmp: %d\n", ft_ret, ret);
+	assert(ft_ret == ret);
+
+	str1 = "H\0ello";
+	str2 = "Hel\0lo";
+	ret = strcmp(str1, str2);
+	ft_ret = ft_strcmp(str1, str2);
+	printf("Ft: %d, Strcmp: %d\n", ft_ret, ret);
+	assert(ft_ret == ret);
+
+	printf("All good. No errors\n");
 }
 
 void ft_read_tests() {
@@ -94,25 +114,66 @@ void ft_read_tests() {
 	
 	//ret = read(10, NULL, sizeof(buffer));
 	ret = ft_read(10, buffer, sizeof(buffer));
+
+	printf("All good. No errors\n");
 }
 
 void ft_strcpy_tests() {
+	char *ft_ret = NULL;
 	char *ret = NULL;
-	char buffer[100] = {0};
+	char buff[100] = {0};
+	char ft_buff[100] = {0};
 	char *src = "Hello";
 
-	ret = ft_strcpy(buffer, src);
-	printf("Buffer: %s, Src: %s\n", ret, src);
-	assert(strcmp(buffer, src) == 0);
+	ret = strcpy(buff, src);
+	ft_ret = ft_strcpy(ft_buff, src);
+	printf("Ft_buff: %s, Buff: %s\n", ft_ret, ret);
+	assert(strcmp(ft_ret, ret) == 0);
+
+	src = "";
+	ret = strcpy(buff, src);
+	ft_ret = ft_strcpy(ft_buff, src);
+	printf("Ft_buff: %s, Buff: %s\n", ft_ret, ret);
+	assert(strcmp(ft_ret, ret) == 0);
+
+	src = "Pol\0asd";
+	ret = strcpy(buff, src);
+	ft_ret = ft_strcpy(ft_buff, src);
+	printf("Ft_buff: %s, Buff: %s\n", ft_ret, ret);
+	assert(strcmp(ft_ret, ret) == 0);
+
+	printf("All good. No errors\n");
 }
 
 void ft_strdup_tests() {
 	char *str = "POALSD";
+	char *ret = NULL;
+	char *ft_ret = NULL;
 
-	char *ret = ft_strdup(str);
-	printf("Str: %p\n", str);
-	printf("Ret: %p, %s\n", ret, ret);
-	assert(strcmp(str, ret) == 0);
+	ret = strdup(str);
+	ft_ret = ft_strdup(str);
+	printf("Ft_ret: %s, Ret: %s\n", ft_ret, ret);
+	assert(strcmp(ft_ret, ret) == 0);
+	free(ft_ret);
+	free(ret);
+
+	str = "Hel\0lo";
+	ret = strdup(str);
+	ft_ret = ft_strdup(str);
+	printf("Ft_ret: %s, Ret: %s\n", ft_ret, ret);
+	assert(strcmp(ft_ret, ret) == 0);
+	free(ft_ret);
+	free(ret);
+
+	str = "";
+	ret = strdup(str);
+	ft_ret = ft_strdup(str);
+	printf("Ft_ret: %s, Ret: %s\n", ft_ret, ret);
+	assert(strcmp(ft_ret, ret) == 0);
+	free(ft_ret);
+	free(ret);
+
+	printf("All good. No errors\n");
 }
 
 void ft_atoi_base_tests() {
@@ -131,17 +192,8 @@ void ft_atoi_base_tests() {
 	printf("Oct: %d\n", ret);
 	ret = ft_atoi_base(str, binary_base);
 	printf("Bin: %d\n", ret);
-	//ret = ft_atoi_base("101A", dec_base);
-	//printf("Bin: %d\n", ret);
 
-	//assert(ret == atoi(str));
-}
-
-int cmp(void *data1, void *data2) {
-	//printf("\nAddr: %p, %p\n", data1, data2);
-	char *nbr1 = (char *)data1;
-	char *nbr2 = (char *)data2;
-	return (strcmp(nbr1, nbr2));
+	printf("All good. No errors\n");
 }
 
 struct list *new_node(void *nbr) {
@@ -153,48 +205,134 @@ struct list *new_node(void *nbr) {
 	return (node);
 }
 
-void print_list(struct list *list) {
+void free_list(struct list *list) {
+	struct list *tmp;
+
+	while (list != NULL) {
+		tmp = list;
+		list = list->next;
+		free(tmp);
+	}
+}
+
+void print_list_int(struct list *list) {
 	while (list != NULL) {
 		printf("List Node: %d\n", *(int *)list->data);
 		list = list->next;
 	}
 }
 
-void ft_list_tests() {
-	int nbr[3] = {3, 2, 1};
-	struct list *list = new_node(&nbr[0]);
-	struct list *temp = NULL;
-	
-	temp = list;
-	for (int i = 1; i < 3; i++) {
-		temp->next = new_node(&nbr[i]);
-		temp = temp->next;
+void print_list_str(struct list *list) {
+	while (list != NULL) {
+		if (list->data != NULL) {
+			printf("List Node: %s\n", (char *)list->data);
+			list = list->next;
+		}
 	}
-	int lol = 90;
-	ft_list_push_front(&list, &lol);
-	temp = list;
-	print_list(list);
-	printf("----------------\n\n");
-
-	// ft_list_size
-	printf("--- FT_LIST_SIZE ---\n");
-	int size = ft_list_size(list);
-	printf("Size: %d\n", size);
 }
 
+void push_back(struct list **list, struct list *new_node) {
+	struct list *tmp = *list;
+
+	if (*list == NULL) {
+		*list = new_node;
+		return;
+	}
+	while (tmp->next != NULL) {
+		tmp = tmp->next;
+	}
+	tmp->next = new_node;
+}
+
+void ft_list_push_front_tests() {
+	int nbr[3] = {3, 2, 1};
+	int src;
+	struct list *list = NULL;
+	
+	for (int i = 0; i < 3; i++) {
+		push_back(&list, new_node(&nbr[i]));
+	}
+	print_list_int(list);
+
+	// Add 782
+	src = 782;
+	ft_list_push_front(&list, &src);
+	printf("\n");
+	print_list_int(list);
+
+	// Add 9090
+	src = 9090;
+	ft_list_push_front(&list, &src);
+	printf("\n");
+	print_list_int(list);
+
+	// Add 180
+	src = 180;
+	ft_list_push_front(&list, &src);
+	printf("\n");
+	print_list_int(list);
+
+	free_list(list);
+}
+
+void ft_list_size_tests() {
+	int nbrs[10] = {10, 78, 90, 87, 45, 345, 456, 1, 3, 4};
+	int ft_ret;
+	int size = sizeof(nbrs) / 4;
+	struct list *list = NULL;
+	
+	for (int i = 0; i < size; i++) {
+		push_back(&list, new_node(&nbrs[i]));
+	}
+
+	ft_ret = ft_list_size(list);
+	printf("Ft_ret: %d, Size: %d\n", ft_ret, size);
+	assert(ft_ret == size);
+
+	push_back(&list, new_node(&nbrs[0]));
+	size++;
+
+	ft_ret = ft_list_size(list);
+	printf("Ft_ret: %d, Size: %d\n", ft_ret, size);
+	assert(ft_ret == size);
+
+	printf("All good. No errors\n");
+	free_list(list);
+}
+
+int cmp_int(void *data1, void *data2) {
+	int a = *(int *)data1;
+	int b = *(int *)data2;
+	return (a - b);
+}
+
+int verify_sort(struct list *list) {
+	while (list->next != NULL) {
+		if (cmp_int(list->data, list->next->data) > 0) {
+			return (0);
+		}
+		list = list->next;
+	}
+	return (1);
+}
 
 void ft_list_sort_tests() {
-	int nbrs[10] = {10, 78, 90, 87, 45, 345, 456, 1, 3, 4};
-	struct list *list = new_node(&nbrs[0]);
-	struct list *temp = NULL;
+	int nbrs[] = {10, 78, 90, 87, 45, 345, 456, 1, 3, 4};
+	//int nbrs[] = {90, 123, 89, 234, 21, 1, 2, 3, 4};
+	int size = sizeof(nbrs) / 4;
+	struct list *list = NULL;
 	
-	temp = list;
-	for (int i = 1; i < 10; i++) {
-		temp->next = new_node(&nbrs[i]);
-		temp = temp->next;
+	for (int i = 0; i < size; i++) {
+		push_back(&list, new_node(&nbrs[i]));
 	}
-	ft_list_sort(&list, cmp);
-	print_list(list);
+	ft_list_sort(&list, cmp_int);
+	if (!verify_sort(list)) {
+		printf("List Not Sorted\n");
+	}
+	//print_list_int(list);
+
+	printf("All good. No errors\n");
+	free_list(list);
 }
 
 void free_fct(void *data) {
@@ -203,24 +341,50 @@ void free_fct(void *data) {
 	data = NULL;
 }
 
+int cmp_str(void *data1, void *data2) {
+	//printf("\nAddr: %p, %p\n", data1, data2);
+	char *nbr1 = (char *)data1;
+	char *nbr2 = (char *)data2;
+	return (strcmp(nbr1, nbr2));
+}
+
+void free_list_data(struct list *list) {
+	struct list *tmp;
+
+	while (list != NULL) {
+		tmp = list;
+		list = list->next;
+		if (tmp->data != NULL) {
+			free(tmp->data);
+		}
+		free(tmp);
+	}
+}
+
 void ft_list_remove_if_tests() {
-	char *str[6];
-	str[0] = strdup("Hello");
+	char *str[7];
+	char *src = "Hello";
+	str[0] = strdup("LL");
 	str[1] = strdup("POlasd");
 	str[2] = strdup("JIdsa");
 	str[3] = strdup("Hello");
 	str[4] = strdup("Koasd");
 	str[5] = strdup("poili");
-	struct list *list = new_node((void *)str[0]);
-	struct list *temp = NULL;
+	str[6] = strdup("Hello");
+	struct list *list = NULL;
 	
-	temp = list;
-	for (int i = 1; i < 5; i++) {
-		temp->next = new_node((void *)str[i]);
-		temp = temp->next;
+	for (int i = 0; i < sizeof(str) / 8; i++) {
+		push_back(&list, new_node(str[i]));
 	}
-	ft_list_remove_if(&list, str[0], cmp, free_fct);
+	//ft_list_remove_if(&list, src, cmp_str, free_fct);
+	printf("Data: %s\n", (char *)list->data);
+	free_fct(list->data);
+	//print_list_str(list);
+	printf("Data: %s\n", (char *)list->data);
+
+	//free_list_data(list);
 }
+
 
 int main() {
 	printf("--- FT_WRITE ---\n");
@@ -232,7 +396,7 @@ int main() {
 	printf("----------------\n\n");
 
 	printf("--- FT_STRCMP ---\n");
-	//ft_strcmp_tests();
+	ft_strcmp_tests();
 	printf("----------------\n\n");
 
 	printf("--- FT_READ ---\n");
@@ -252,14 +416,18 @@ int main() {
 	printf("----------------\n\n");
 
 	printf("--- FT_LIST_PUSH_FRONT ---\n");
-	ft_list_tests();
+	ft_list_push_front_tests();
 	printf("----------------\n\n");
 
-	//printf("--- FT_LIST_SORT ---\n");
-	//ft_list_sort_tests();
+	printf("--- FT_LIST_SIZE ---\n");
+	ft_list_size_tests();
+	printf("----------------\n\n");
+
+	printf("--- FT_LIST_SORT ---\n");
+	ft_list_sort_tests();
+	printf("----------------\n\n");
+
+	//printf("--- FT_LIST_REMOVE_If ---\n");
+	//ft_list_remove_if_tests();
 	//printf("----------------\n\n");
-
-	printf("--- FT_LIST_REMOVE_If ---\n");
-	ft_list_remove_if_tests();
-	printf("----------------\n\n");
 }
