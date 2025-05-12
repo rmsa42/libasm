@@ -20,7 +20,7 @@ extern char *ft_strdup(const char *str);
 extern int ft_atoi_base(char *str, char *base);
 extern void ft_list_push_front(struct list **list, void *data);
 extern int ft_list_size(struct list *list);
-extern void ft_list_sort(struct list **list, int(*cmp)(int, int));
+extern void ft_list_sort(struct list **list, int(*cmp)(void *, void *));
 
 void ft_write_tests() {
 	char *str = NULL;
@@ -92,7 +92,7 @@ void ft_read_tests() {
 	char buffer[100] = {0};
 	
 	//ret = read(10, NULL, sizeof(buffer));
-	ret = ft_read(10, NULL, sizeof(buffer));
+	ret = ft_read(10, buffer, sizeof(buffer));
 }
 
 void ft_strcpy_tests() {
@@ -136,8 +136,12 @@ void ft_atoi_base_tests() {
 	//assert(ret == atoi(str));
 }
 
-int cmp(int a, int b) {
-	return (a - b);
+int cmp(void *data1, void *data2) {
+	//printf("\nAddr: %p, %p\n", data1, data2);
+	int nbr1 = *(int *)data1;
+	int nbr2 = *(int *)data2;
+	//printf("Nbr: %d, %d\n", nbr1, nbr2);
+	return (nbr1 - nbr2);
 }
 
 struct list *new_node(const int *nbr) {
@@ -149,16 +153,26 @@ struct list *new_node(const int *nbr) {
 	return (node);
 }
 
+void print_list(struct list *list) {
+	while (list != NULL) {
+		printf("List Node: %d\n", *(int *)list->data);
+		list = list->next;
+	}
+}
+
 void ft_list_tests() {
 	int nbr[3] = {3, 2, 1};
 	struct list *list = new_node(&nbr[0]);
+	struct list *temp = NULL;
 	
+	temp = list;
 	for (int i = 1; i < 3; i++) {
-		list->next = new_node(&nbr[i]);
+		temp->next = new_node(&nbr[i]);
+		temp = temp->next;
 	}
 	int lol = 90;
 	ft_list_push_front(&list, &lol);
-	struct list *temp = list;
+	temp = list;
 	while (temp != NULL) {
 		printf("List Node: %d\n", *(int *)temp->data);
 		temp = temp->next;
@@ -169,16 +183,21 @@ void ft_list_tests() {
 	printf("--- FT_LIST_SIZE ---\n");
 	int size = ft_list_size(list);
 	printf("Size: %d\n", size);
-	printf("----------------\n\n");
+}
 
-	// ft_list_sort
-	printf("--- FT_LIST_SORT ---\n");
-	ft_list_sort(&list, &cmp);
+
+void ft_list_sort_tests() {
+	int nbrs[10] = {10, 78, 90, 87, 45, 345, 456, 1, 3, 4};
+	struct list *list = new_node(&nbrs[0]);
+	struct list *temp = NULL;
+	
 	temp = list;
-	while (temp != NULL) {
-		printf("List Node: %d\n", *(int *)temp->data);
+	for (int i = 1; i < 10; i++) {
+		temp->next = new_node(&nbrs[i]);
 		temp = temp->next;
 	}
+	ft_list_sort(&list, cmp);
+	print_list(list);
 }
 
 int main() {
@@ -212,5 +231,9 @@ int main() {
 
 	printf("--- FT_LIST_PUSH_FRONT ---\n");
 	ft_list_tests();
+	printf("----------------\n\n");
+
+	printf("--- FT_LIST_SORT ---\n");
+	ft_list_sort_tests();
 	printf("----------------\n\n");
 }

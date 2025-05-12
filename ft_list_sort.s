@@ -5,23 +5,35 @@ global ft_list_sort
 ft_list_sort:
 	push rbp
 	mov rbp, rsp
-	sub rsp, 16
-	mov qword [rbp - 8], rsi
+	sub rsp, 32
+	mov qword [rbp - 8], rdi
+	mov qword [rbp - 16], rsi
 	mov rcx, [rdi]
 .loop:
 	cmp rcx, 0
 	je .ret
-	mov rdi, 1
-	mov rsi, 12
-	mov qword [rbp - 16], rcx
-	call qword [rbp - 8]
-	cmp rax, 0
+	mov qword [rbp - 24], rcx ; Save List *
+	mov rdi, qword [rcx] ; Load the void *
+	mov rsi, qword [rcx + 8] ; Load next *
+	cmp rsi, 0
+	je .ret
+	mov rsi, qword [rsi] ; Get void *
+	call qword [rbp - 16] ; Call cmp function
+	cmp eax, 0
 	jg .swap
 	jmp .loop2
 .swap:
-	; rdi - 100, rsi - 5
+	mov rdi, qword [rbp - 24]
+	mov rcx, qword [rdi] ; Load first void *
+	mov rsi, qword [rdi + 8]
+	mov rdx, qword [rsi] ; Load second void *
+	mov qword [rsi], rcx
+	mov qword [rdi], rdx
+	mov rcx, qword [rbp - 8]
+	mov rcx, [rcx]
+	jmp .loop
 .loop2:
-	mov rcx, qword [rbp - 16]
+	mov rcx, qword [rbp - 24]
 	mov rcx, qword [rcx + 8]
 	jmp .loop
 .ret:
