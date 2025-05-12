@@ -21,6 +21,7 @@ extern int ft_atoi_base(char *str, char *base);
 extern void ft_list_push_front(struct list **list, void *data);
 extern int ft_list_size(struct list *list);
 extern void ft_list_sort(struct list **list, int(*cmp)(void *, void *));
+extern void ft_list_remove_if(struct list **list, void *data, int(*cmp)(void *, void *), void(*free_fct)(void *));
 
 void ft_write_tests() {
 	char *str = NULL;
@@ -138,17 +139,16 @@ void ft_atoi_base_tests() {
 
 int cmp(void *data1, void *data2) {
 	//printf("\nAddr: %p, %p\n", data1, data2);
-	int nbr1 = *(int *)data1;
-	int nbr2 = *(int *)data2;
-	//printf("Nbr: %d, %d\n", nbr1, nbr2);
-	return (nbr1 - nbr2);
+	char *nbr1 = (char *)data1;
+	char *nbr2 = (char *)data2;
+	return (strcmp(nbr1, nbr2));
 }
 
-struct list *new_node(const int *nbr) {
+struct list *new_node(void *nbr) {
 	struct list *node;
 
 	node = malloc(sizeof(struct list));
-	node->data = (void *)nbr;
+	node->data = nbr;
 	node->next = NULL;
 	return (node);
 }
@@ -173,10 +173,7 @@ void ft_list_tests() {
 	int lol = 90;
 	ft_list_push_front(&list, &lol);
 	temp = list;
-	while (temp != NULL) {
-		printf("List Node: %d\n", *(int *)temp->data);
-		temp = temp->next;
-	}
+	print_list(list);
 	printf("----------------\n\n");
 
 	// ft_list_size
@@ -198,6 +195,31 @@ void ft_list_sort_tests() {
 	}
 	ft_list_sort(&list, cmp);
 	print_list(list);
+}
+
+void free_fct(void *data) {
+	printf("Called free: %s\n", (char *)data);
+	free(data);
+	data = NULL;
+}
+
+void ft_list_remove_if_tests() {
+	char *str[6];
+	str[0] = strdup("Hello");
+	str[1] = strdup("POlasd");
+	str[2] = strdup("JIdsa");
+	str[3] = strdup("Hello");
+	str[4] = strdup("Koasd");
+	str[5] = strdup("poili");
+	struct list *list = new_node((void *)str[0]);
+	struct list *temp = NULL;
+	
+	temp = list;
+	for (int i = 1; i < 5; i++) {
+		temp->next = new_node((void *)str[i]);
+		temp = temp->next;
+	}
+	ft_list_remove_if(&list, str[0], cmp, free_fct);
 }
 
 int main() {
@@ -233,7 +255,11 @@ int main() {
 	ft_list_tests();
 	printf("----------------\n\n");
 
-	printf("--- FT_LIST_SORT ---\n");
-	ft_list_sort_tests();
+	//printf("--- FT_LIST_SORT ---\n");
+	//ft_list_sort_tests();
+	//printf("----------------\n\n");
+
+	printf("--- FT_LIST_REMOVE_If ---\n");
+	ft_list_remove_if_tests();
 	printf("----------------\n\n");
 }
