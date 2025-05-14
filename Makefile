@@ -15,7 +15,7 @@ $(NAME): $(OBJ)
 	$(NASM) $(NASM_FLAGS) -o $@ $<
 
 all: $(NAME)
-	cc -o $(NAME) main.c -L. -lasm
+	cc -o $(NAME) -g main.c -L. -lasm
 	./$(NAME)
 
 clean:
