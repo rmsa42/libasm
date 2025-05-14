@@ -223,10 +223,12 @@ void free_list(struct list *list) {
 }
 
 void print_list_int(struct list *list) {
+	printf("List: ");
 	while (list != NULL) {
-		printf("List Node: %d\n", *(int *)list->data);
+		printf("%d ", *(int *)list->data);
 		list = list->next;
 	}
+	printf("\n");
 }
 
 void print_list_str(struct list *list) {
@@ -251,31 +253,35 @@ void push_back(struct list **list, struct list *new_node) {
 	tmp->next = new_node;
 }
 
+struct list *make_list(int *nbrs, size_t len) {
+	struct list *list = NULL;
+
+	for (unsigned int i = 0; i < len; i++) {
+		push_back(&list, new_node(&nbrs[i]));
+	}
+	return (list);
+}
+
 void ft_list_push_front_tests() {
 	int nbrs[3] = {3, 2, 1};
 	struct list *list = NULL;
-	
-	for (int i = 0; i < 3; i++) {
-		push_back(&list, new_node(&nbrs[i]));
-	}
+
+	list = make_list(nbrs, sizeof(nbrs) / 4);
 	print_list_int(list);
 
 	// Add 782
 	int nbr = 782;
 	ft_list_push_front(&list, &nbr);
-	printf("\n");
 	print_list_int(list);
 
 	// Add 9090
 	int nbr2 = 9090;
 	ft_list_push_front(&list, &nbr2);
-	printf("\n");
 	print_list_int(list);
 
 	// Add 180
 	int nbr3 = 180;
 	ft_list_push_front(&list, &nbr3);
-	printf("\n");
 	print_list_int(list);
 
 	free_list(list);
@@ -287,9 +293,7 @@ void ft_list_size_tests() {
 	int size = sizeof(nbrs) / 4;
 	struct list *list = NULL;
 	
-	for (int i = 0; i < size; i++) {
-		push_back(&list, new_node(&nbrs[i]));
-	}
+	list = make_list(nbrs, sizeof(nbrs) / 4);
 
 	ft_ret = ft_list_size(list);
 	printf("Ft_ret: %d, Size: %d\n", ft_ret, size);
@@ -328,88 +332,101 @@ void ft_list_sort_tests() {
 	int size = sizeof(nbrs) / 4;
 	struct list *list = NULL;
 	
-	for (int i = 0; i < size; i++) {
-		push_back(&list, new_node(&nbrs[i]));
-	}
+	list = make_list(nbrs, sizeof(nbrs) / 4);
+	print_list_int(list);
+
 	ft_list_sort(&list, cmp_int);
 	if (!verify_sort(list)) {
 		printf(RED "List Not Sorted\n" RST);
 	}
-	//print_list_int(list);
+	print_list_int(list);
+	free_list(list);
 
 	printf(GRN "All good. No errors\n" RST);
-	free_list(list);
 }
 
 void free_fct(void *data) {
-	printf("Called free: %p\n", (struct list *)data);
+	//printf("Called free: %p\n", (struct list *)data);
 	free(data);
-}
-
-int cmp_str(void *data1, void *data2) {
-	//printf("\nAddr: %p, %p\n", data1, data2);
-	char *nbr1 = (char *)data1;
-	char *nbr2 = (char *)data2;
-	return (strcmp(nbr1, nbr2));
 }
 
 void ft_list_remove_if_tests() {
 	int nbrs[] = {234, 90, 23496, 5456, 234, 123, 647, 234};
-	//int nbrs[] = {234, 234, 234};
-	//int nbrs[] = {234, 0, 234, 234};
 	int src = 234;
 	struct list *list = NULL;
 	
-	for (int i = 0; i < sizeof(nbrs) / 4; i++) {
-		push_back(&list, new_node(&nbrs[i]));
-	}
+	list = make_list(nbrs, sizeof(nbrs) / 4);
 	ft_list_remove_if(&list, &src, cmp_int, free_fct);
 	print_list_int(list);
+	assert(ft_list_size(list) == 5);
 	free_list(list);
+
+	int nbrs2[] = {234, 234, 234};
+	list = make_list(nbrs2, sizeof(nbrs2) / 4);
+	ft_list_remove_if(&list, &src, cmp_int, free_fct);
+	print_list_int(list);
+	assert(ft_list_size(list) == 0);
+	free_list(list);
+
+	int nbrs3[] = {234, 0, 234, 234};
+	list = make_list(nbrs3, sizeof(nbrs3) / 4);
+	ft_list_remove_if(&list, &src, cmp_int, free_fct);
+	print_list_int(list);
+	assert(ft_list_size(list) == 1);
+	free_list(list);
+
+	int nbrs4[] = {123213, 323, 23489, 234, 2342, 324, 234, 0};
+	list = make_list(nbrs4, sizeof(nbrs4) / 4);
+	ft_list_remove_if(&list, &src, cmp_int, free_fct);
+	print_list_int(list);
+	assert(ft_list_size(list) == 6);
+	free_list(list);
+
+	printf(GRN "All good. No errors\n" RST);
 }
 
 
 int main() {
-//	printf("--- FT_WRITE ---\n");
-//	ft_write_tests();
-//	printf("----------------\n\n");
-//
-//	printf("--- FT_STRLEN ---\n");
-//	ft_strlen_tests();
-//	printf("----------------\n\n");
-//
-//	printf("--- FT_STRCMP ---\n");
-//	ft_strcmp_tests();
-//	printf("----------------\n\n");
-//
-//	printf("--- FT_READ ---\n");
-//	ft_read_tests();
-//	printf("----------------\n\n");
-//
-//	printf("--- FT_STRCPY ---\n");
-//	ft_strcpy_tests();
-//	printf("----------------\n\n");
-//
-//	printf("--- FT_STRDUP ---\n");
-//	ft_strdup_tests();
-//	printf("----------------\n\n");
+	printf("--- FT_WRITE ---\n");
+	ft_write_tests();
+	printf("----------------\n\n");
 
-//
-//	printf("--- FT_ATOI_BASE ---\n");
-//	ft_atoi_base_tests();
-//	printf("----------------\n\n");
+	printf("--- FT_STRLEN ---\n");
+	ft_strlen_tests();
+	printf("----------------\n\n");
 
-//	printf("--- FT_LIST_PUSH_FRONT ---\n");
-//	ft_list_push_front_tests();
-//	printf("----------------\n\n");
-//
-//	printf("--- FT_LIST_SIZE ---\n");
-//	ft_list_size_tests();
-//	printf("----------------\n\n");
-//
-//	printf("--- FT_LIST_SORT ---\n");
-//	ft_list_sort_tests();
-//	printf("----------------\n\n");
+	printf("--- FT_STRCMP ---\n");
+	ft_strcmp_tests();
+	printf("----------------\n\n");
+
+	printf("--- FT_READ ---\n");
+	ft_read_tests();
+	printf("----------------\n\n");
+
+	printf("--- FT_STRCPY ---\n");
+	ft_strcpy_tests();
+	printf("----------------\n\n");
+
+	printf("--- FT_STRDUP ---\n");
+	ft_strdup_tests();
+	printf("----------------\n\n");
+
+
+	printf("--- FT_ATOI_BASE ---\n");
+	ft_atoi_base_tests();
+	printf("----------------\n\n");
+
+	printf("--- FT_LIST_PUSH_FRONT ---\n");
+	ft_list_push_front_tests();
+	printf("----------------\n\n");
+
+	printf("--- FT_LIST_SIZE ---\n");
+	ft_list_size_tests();
+	printf("----------------\n\n");
+
+	printf("--- FT_LIST_SORT ---\n");
+	ft_list_sort_tests();
+	printf("----------------\n\n");
 
 	printf("--- FT_LIST_REMOVE_If ---\n");
 	ft_list_remove_if_tests();
