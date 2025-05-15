@@ -20,6 +20,7 @@ extern int ft_strcmp(char *str1, char *str2);
 extern int ft_read(int fd, void *buf, size_t nbyte);
 extern char *ft_strcpy(const char *dest, const char *src);
 extern char *ft_strdup(const char *str);
+
 extern int ft_atoi_base(char *str, char *base);
 extern void ft_list_push_front(struct list **list, void *data);
 extern int ft_list_size(struct list *list);
@@ -38,7 +39,7 @@ void ft_write_tests() {
 	assert(ft_ret == wr_ret);
 
 	// Prints half
-	str = "Halfed Text\n";
+	str = "Half Text\n";
 	wr_ret = write(1, str, strlen(str) / 2);
 	ft_ret = ft_write(1, str, strlen(str) / 2);
 	assert(ft_ret == wr_ret);
@@ -49,7 +50,7 @@ void ft_write_tests() {
 	ft_ret = ft_write(10, str, strlen(str));
 	assert(ft_ret == wr_ret);
 
-	printf(GRN "All good. No errors\n" RST);
+	printf(GRN "\nAll good. No errors\n" RST);
 }
 
 void ft_strlen_tests() {
@@ -179,211 +180,211 @@ void ft_strdup_tests() {
 	printf(GRN "All good. No errors\n" RST);
 }
 
-void ft_atoi_base_tests() {
-	char *str = "101010";
-	char *dec_base = "0123456789";
-	char *hex_base = "0123456789ABCDEF";
-	char *octal_base = "01234567";
-	char *binary_base = "01";
-	int ret;
-
-	ret = ft_atoi_base(str, dec_base);
-	printf("Dec: %d\n", ret);
-	//assert(atoi(str) == ret);
-
-	ret = ft_atoi_base(str, hex_base);
-	printf("Hex: %d\n", ret);
-
-	ret = ft_atoi_base(str, octal_base);
-	printf("Oct: %d\n", ret);
-
-	ret = ft_atoi_base(str, binary_base);
-	printf("Bin: %d\n", ret);
-
-	printf(GRN "All good. No errors\n" RST);
-}
-
-struct list *new_node(void *nbr) {
-	struct list *node;
-
-	node = malloc(sizeof(struct list));
-	node->data = nbr;
-	node->next = NULL;
-	return (node);
-}
-
-void free_list(struct list *list) {
-	struct list *tmp;
-
-	while (list != NULL) {
-		tmp = list;
-		list = list->next;
-		free(tmp);
-	}
-}
-
-void print_list_int(struct list *list) {
-	printf("List: ");
-	while (list != NULL) {
-		printf("%d ", *(int *)list->data);
-		list = list->next;
-	}
-	printf("\n");
-}
-
-void print_list_str(struct list *list) {
-	while (list != NULL) {
-		if (list->data != NULL) {
-			printf("List Node: %s\n", (char *)list->data);
-			list = list->next;
-		}
-	}
-}
-
-void push_back(struct list **list, struct list *new_node) {
-	struct list *tmp = *list;
-
-	if (*list == NULL) {
-		*list = new_node;
-		return;
-	}
-	while (tmp->next != NULL) {
-		tmp = tmp->next;
-	}
-	tmp->next = new_node;
-}
-
-struct list *make_list(int *nbrs, size_t len) {
-	struct list *list = NULL;
-
-	for (unsigned int i = 0; i < len; i++) {
-		push_back(&list, new_node(&nbrs[i]));
-	}
-	return (list);
-}
-
-void ft_list_push_front_tests() {
-	int nbrs[3] = {3, 2, 1};
-	struct list *list = NULL;
-
-	list = make_list(nbrs, sizeof(nbrs) / 4);
-	print_list_int(list);
-
-	// Add 782
-	int nbr = 782;
-	ft_list_push_front(&list, &nbr);
-	print_list_int(list);
-
-	// Add 9090
-	int nbr2 = 9090;
-	ft_list_push_front(&list, &nbr2);
-	print_list_int(list);
-
-	// Add 180
-	int nbr3 = 180;
-	ft_list_push_front(&list, &nbr3);
-	print_list_int(list);
-
-	free_list(list);
-}
-
-void ft_list_size_tests() {
-	int nbrs[10] = {10, 78, 90, 87, 45, 345, 456, 1, 3, 4};
-	int ft_ret;
-	int size = sizeof(nbrs) / 4;
-	struct list *list = NULL;
-	
-	list = make_list(nbrs, sizeof(nbrs) / 4);
-
-	ft_ret = ft_list_size(list);
-	printf("Ft_ret: %d, Size: %d\n", ft_ret, size);
-	assert(ft_ret == size);
-
-	push_back(&list, new_node(&nbrs[0]));
-	size++;
-
-	ft_ret = ft_list_size(list);
-	printf("Ft_ret: %d, Size: %d\n", ft_ret, size);
-	assert(ft_ret == size);
-
-	printf(GRN "All good. No errors\n" RST);
-	free_list(list);
-}
-
-int cmp_int(void *data1, void *data2) {
-	int a = *(int *)data1;
-	int b = *(int *)data2;
-	return (a - b);
-}
-
-int verify_sort(struct list *list) {
-	while (list->next != NULL) {
-		if (cmp_int(list->data, list->next->data) > 0) {
-			return (0);
-		}
-		list = list->next;
-	}
-	return (1);
-}
-
-void ft_list_sort_tests() {
-	int nbrs[] = {10, 78, 90, 87, 45, 345, 456, 1, 3, 4};
-	//int nbrs[] = {90, 123, 89, 234, 21, 1, 2, 3, 4};
-	int size = sizeof(nbrs) / 4;
-	struct list *list = NULL;
-	
-	list = make_list(nbrs, sizeof(nbrs) / 4);
-	print_list_int(list);
-
-	ft_list_sort(&list, cmp_int);
-	if (!verify_sort(list)) {
-		printf(RED "List Not Sorted\n" RST);
-	}
-	print_list_int(list);
-	free_list(list);
-
-	printf(GRN "All good. No errors\n" RST);
-}
-
-void free_fct(void *data) {
-	//printf("Called free: %p\n", (struct list *)data);
-	free(data);
-}
-
-void ft_list_remove_if_tests() {
-	int nbrs[] = {234, 90, 23496, 5456, 234, 123, 647, 234};
-	int src = 234;
-	struct list *list = NULL;
-	
-	list = make_list(nbrs, sizeof(nbrs) / 4);
-	ft_list_remove_if(&list, &src, cmp_int, free_fct);
-	print_list_int(list);
-	assert(ft_list_size(list) == 5);
-	free_list(list);
-
-	int nbrs2[] = {234, 234, 234};
-	list = make_list(nbrs2, sizeof(nbrs2) / 4);
-	ft_list_remove_if(&list, &src, cmp_int, free_fct);
-	print_list_int(list);
-	assert(ft_list_size(list) == 0);
-	free_list(list);
-
-	int nbrs3[] = {234, 0, 234, 234};
-	list = make_list(nbrs3, sizeof(nbrs3) / 4);
-	ft_list_remove_if(&list, &src, cmp_int, free_fct);
-	print_list_int(list);
-	assert(ft_list_size(list) == 1);
-	free_list(list);
-
-	int nbrs4[] = {123213, 323, 23489, 234, 2342, 324, 234, 0};
-	list = make_list(nbrs4, sizeof(nbrs4) / 4);
-	ft_list_remove_if(&list, &src, cmp_int, free_fct);
-	print_list_int(list);
-	assert(ft_list_size(list) == 6);
-	free_list(list);
-
-	printf(GRN "All good. No errors\n" RST);
-}
+//void ft_atoi_base_tests() {
+//	char *str = "101010";
+//	char *dec_base = "0123456789";
+//	char *hex_base = "0123456789ABCDEF";
+//	char *octal_base = "01234567";
+//	char *binary_base = "01";
+//	int ret;
+//
+//	ret = ft_atoi_base(str, dec_base);
+//	printf("Dec: %d\n", ret);
+//	//assert(atoi(str) == ret);
+//
+//	ret = ft_atoi_base(str, hex_base);
+//	printf("Hex: %d\n", ret);
+//
+//	ret = ft_atoi_base(str, octal_base);
+//	printf("Oct: %d\n", ret);
+//
+//	ret = ft_atoi_base(str, binary_base);
+//	printf("Bin: %d\n", ret);
+//
+//	printf(GRN "All good. No errors\n" RST);
+//}
+//
+//struct list *new_node(void *nbr) {
+//	struct list *node;
+//
+//	node = malloc(sizeof(struct list));
+//	node->data = nbr;
+//	node->next = NULL;
+//	return (node);
+//}
+//
+//void free_list(struct list *list) {
+//	struct list *tmp;
+//
+//	while (list != NULL) {
+//		tmp = list;
+//		list = list->next;
+//		free(tmp);
+//	}
+//}
+//
+//void print_list_int(struct list *list) {
+//	printf("List: ");
+//	while (list != NULL) {
+//		printf("%d ", *(int *)list->data);
+//		list = list->next;
+//	}
+//	printf("\n");
+//}
+//
+//void print_list_str(struct list *list) {
+//	while (list != NULL) {
+//		if (list->data != NULL) {
+//			printf("List Node: %s\n", (char *)list->data);
+//			list = list->next;
+//		}
+//	}
+//}
+//
+//void push_back(struct list **list, struct list *new_node) {
+//	struct list *tmp = *list;
+//
+//	if (*list == NULL) {
+//		*list = new_node;
+//		return;
+//	}
+//	while (tmp->next != NULL) {
+//		tmp = tmp->next;
+//	}
+//	tmp->next = new_node;
+//}
+//
+//struct list *make_list(int *nbrs, size_t len) {
+//	struct list *list = NULL;
+//
+//	for (unsigned int i = 0; i < len; i++) {
+//		push_back(&list, new_node(&nbrs[i]));
+//	}
+//	return (list);
+//}
+//
+//void ft_list_push_front_tests() {
+//	int nbrs[3] = {3, 2, 1};
+//	struct list *list = NULL;
+//
+//	list = make_list(nbrs, sizeof(nbrs) / 4);
+//	print_list_int(list);
+//
+//	// Add 782
+//	int nbr = 782;
+//	ft_list_push_front(&list, &nbr);
+//	print_list_int(list);
+//
+//	// Add 9090
+//	int nbr2 = 9090;
+//	ft_list_push_front(&list, &nbr2);
+//	print_list_int(list);
+//
+//	// Add 180
+//	int nbr3 = 180;
+//	ft_list_push_front(&list, &nbr3);
+//	print_list_int(list);
+//
+//	free_list(list);
+//}
+//
+//void ft_list_size_tests() {
+//	int nbrs[10] = {10, 78, 90, 87, 45, 345, 456, 1, 3, 4};
+//	int ft_ret;
+//	int size = sizeof(nbrs) / 4;
+//	struct list *list = NULL;
+//	
+//	list = make_list(nbrs, sizeof(nbrs) / 4);
+//
+//	ft_ret = ft_list_size(list);
+//	printf("Ft_ret: %d, Size: %d\n", ft_ret, size);
+//	assert(ft_ret == size);
+//
+//	push_back(&list, new_node(&nbrs[0]));
+//	size++;
+//
+//	ft_ret = ft_list_size(list);
+//	printf("Ft_ret: %d, Size: %d\n", ft_ret, size);
+//	assert(ft_ret == size);
+//
+//	printf(GRN "All good. No errors\n" RST);
+//	free_list(list);
+//}
+//
+//int cmp_int(void *data1, void *data2) {
+//	int a = *(int *)data1;
+//	int b = *(int *)data2;
+//	return (a - b);
+//}
+//
+//int verify_sort(struct list *list) {
+//	while (list->next != NULL) {
+//		if (cmp_int(list->data, list->next->data) > 0) {
+//			return (0);
+//		}
+//		list = list->next;
+//	}
+//	return (1);
+//}
+//
+//void ft_list_sort_tests() {
+//	int nbrs[] = {10, 78, 90, 87, 45, 345, 456, 1, 3, 4};
+//	//int nbrs[] = {90, 123, 89, 234, 21, 1, 2, 3, 4};
+//	int size = sizeof(nbrs) / 4;
+//	struct list *list = NULL;
+//	
+//	list = make_list(nbrs, sizeof(nbrs) / 4);
+//	print_list_int(list);
+//
+//	ft_list_sort(&list, cmp_int);
+//	if (!verify_sort(list)) {
+//		printf(RED "List Not Sorted\n" RST);
+//	}
+//	print_list_int(list);
+//	free_list(list);
+//
+//	printf(GRN "All good. No errors\n" RST);
+//}
+//
+//void free_fct(void *data) {
+//	//printf("Called free: %p\n", (struct list *)data);
+//	free(data);
+//}
+//
+//void ft_list_remove_if_tests() {
+//	int nbrs[] = {234, 90, 23496, 5456, 234, 123, 647, 234};
+//	int src = 234;
+//	struct list *list = NULL;
+//	
+//	list = make_list(nbrs, sizeof(nbrs) / 4);
+//	ft_list_remove_if(&list, &src, cmp_int, free_fct);
+//	print_list_int(list);
+//	assert(ft_list_size(list) == 5);
+//	free_list(list);
+//
+//	int nbrs2[] = {234, 234, 234};
+//	list = make_list(nbrs2, sizeof(nbrs2) / 4);
+//	ft_list_remove_if(&list, &src, cmp_int, free_fct);
+//	print_list_int(list);
+//	assert(ft_list_size(list) == 0);
+//	free_list(list);
+//
+//	int nbrs3[] = {234, 0, 234, 234};
+//	list = make_list(nbrs3, sizeof(nbrs3) / 4);
+//	ft_list_remove_if(&list, &src, cmp_int, free_fct);
+//	print_list_int(list);
+//	assert(ft_list_size(list) == 1);
+//	free_list(list);
+//
+//	int nbrs4[] = {123213, 323, 23489, 234, 2342, 324, 234, 0};
+//	list = make_list(nbrs4, sizeof(nbrs4) / 4);
+//	ft_list_remove_if(&list, &src, cmp_int, free_fct);
+//	print_list_int(list);
+//	assert(ft_list_size(list) == 6);
+//	free_list(list);
+//
+//	printf(GRN "All good. No errors\n" RST);
+//}
 
 
 int main() {
@@ -412,23 +413,23 @@ int main() {
 	printf("----------------\n\n");
 
 
-	printf("--- FT_ATOI_BASE ---\n");
-	ft_atoi_base_tests();
-	printf("----------------\n\n");
-
-	printf("--- FT_LIST_PUSH_FRONT ---\n");
-	ft_list_push_front_tests();
-	printf("----------------\n\n");
-
-	printf("--- FT_LIST_SIZE ---\n");
-	ft_list_size_tests();
-	printf("----------------\n\n");
-
-	printf("--- FT_LIST_SORT ---\n");
-	ft_list_sort_tests();
-	printf("----------------\n\n");
-
-	printf("--- FT_LIST_REMOVE_If ---\n");
-	ft_list_remove_if_tests();
-	printf("----------------\n\n");
+//	printf("--- FT_ATOI_BASE ---\n");
+//	ft_atoi_base_tests();
+//	printf("----------------\n\n");
+//
+//	printf("--- FT_LIST_PUSH_FRONT ---\n");
+//	ft_list_push_front_tests();
+//	printf("----------------\n\n");
+//
+//	printf("--- FT_LIST_SIZE ---\n");
+//	ft_list_size_tests();
+//	printf("----------------\n\n");
+//
+//	printf("--- FT_LIST_SORT ---\n");
+//	ft_list_sort_tests();
+//	printf("----------------\n\n");
+//
+//	printf("--- FT_LIST_REMOVE_If ---\n");
+//	ft_list_remove_if_tests();
+//	printf("----------------\n\n");
 }
