@@ -1,8 +1,7 @@
+section .text
 global ft_strlen
 
-section .text
-
-; rsi str
+; rdi str
 ft_strlen:
 	mov rax, 0 ; Init rax reg
 	jmp .loop
@@ -13,15 +12,3 @@ ft_strlen:
 	jmp .loop ; Loop again
 .return:
 	ret
-
-;_start:
-;	mov rsi, msg
-;	call ft_strlen
-;	push rax
-;	mov rax, 60 ; exit() syscall
-;	mov rsi, 1 ; status code
-;	syscall
-
-;section .data
-;	
-;	msg: db "Hello"

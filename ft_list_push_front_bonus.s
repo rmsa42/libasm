@@ -1,7 +1,3 @@
-section .data
-
-msg: db "Debug: %p", 10, 0
-
 section .text
 global ft_list_push_front
 

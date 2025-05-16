@@ -3,7 +3,7 @@ global ft_write
 
 extern __errno_location
 
-; rax fd, rdi str, rsi len
+; rdi fd, rsi str, rdx len
 ft_write:
 	mov rax, 1 ; Write syscall
 	syscall ; Call write()

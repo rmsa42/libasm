@@ -1,15 +1,5 @@
-section .data
-
-print_nbr: db "Nbr: %d", 10, 0
-print_char: db "Char: %c", 10, 0
-base: db "Error in verify_base", 10, 0
-str: db "Error in verify_str", 10, 0
-
 section .text
 global ft_atoi_base
-
-extern strlen ; strlen(rdi - char *str)
-extern printf ; printf("Str", )
 
 ; rdi str
 get_base:

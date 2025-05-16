@@ -3,6 +3,7 @@ global ft_read
 
 extern __errno_location
 
+; rdi fd, rsi buffer, rdx len
 ft_read:
 	mov rax, 0	
 	syscall
