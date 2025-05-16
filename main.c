@@ -1,4 +1,5 @@
 #include <errno.h>
+#include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
@@ -113,11 +114,33 @@ void ft_strcmp_tests() {
 }
 
 void ft_read_tests() {
+	int ft_ret;
 	int ret;
-	char buffer[100] = {0};
+	char ft_buff[100] = {0};
+	char buff[100] = {0};
+
+
+	int fd = open("test.txt", O_RDONLY);
+	ret = read(fd, buff, sizeof(buff));
+	printf("Read: %d", ret);
+	close(fd);
+	fd = open("test.txt", O_RDONLY);
+	ft_ret = ft_read(fd, ft_buff, sizeof(ft_buff));
+	printf(", Ft: %d\n", ft_ret);
+	assert(ft_ret == ret);
+	assert(strcmp(ft_buff, buff) == 0);
 	
-	//ret = read(10, NULL, sizeof(buffer));
-	ret = ft_read(10, buffer, sizeof(buffer));
+	//memset(buff, 0, sizeof(buff));
+	//memset(ft_buff, 0, sizeof(ft_buff));
+	//ret = read(1, buff, sizeof(buff));
+	//ft_ret = ft_read(1, ft_buff, sizeof(ft_buff));
+	//printf("Ret: %d, Ft: %d\n", ret, ft_ret);
+	//assert(ft_ret == ret);
+	//assert(strcmp(ft_buff, buff) == 0);
+
+	// Bad fd
+	ft_ret = ft_read(10, ft_buff, sizeof(ft_buff));
+	assert(ft_ret == -1);
 
 	printf(GRN "All good. No errors\n" RST);
 }

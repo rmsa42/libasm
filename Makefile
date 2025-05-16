@@ -32,6 +32,7 @@ clean:
 
 fclean: clean
 	rm -rf $(LIB_NAME)
+	rm -rf $(NAME)
 
 re: fclean all
 
